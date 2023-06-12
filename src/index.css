@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@200;300;400;500;600&display=swap');
+
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+body {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.ant-menu {
+  border-right: none !important;
+}
+.ant-menu-item {
+  height: 60px !important;
+}
+.ant-menu-submenu-selected {
+  color: #fff !important;
+}
+.ant-menu-submenu-selected,
+.ant-menu-item-selected {
+  background: #ffb800 !important;
+  color: #fff !important;
+}
+.ant-menu-title-content {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  font-weight: 800;
+}
+
+.icon-svg {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+  font-weight: 300;
+  color: aliceblue;
+}
