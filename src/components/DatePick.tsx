@@ -1,16 +1,18 @@
 import { DatePicker, Radio, RadioChangeEvent } from 'antd';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import dayjs from 'dayjs';
 import 'dayjs/locale/vi'; // Import the Vietnamese locale for dayjs
 import locale from 'antd/es/date-picker/locale/vi_VN';
 import styled from 'styled-components';
+import { DateContext } from '../context/DateContext';
 
-const DatePick = () => {
-  const [mode, setMode] = useState('day');
+const DatePick = ({ disabled }: { disabled: boolean }) => {
+  const { mode, setMode } = useContext(DateContext);
 
   const handleModeChange = (e: RadioChangeEvent) => {
     setMode(e.target.value);
   };
+  console.log(mode);
 
   const renderExtraHeader = () => {
     return (
@@ -36,11 +38,12 @@ const DatePick = () => {
 
   return (
     <CustomDatePick
-      className="h-[40px]"
+      className="h-[40px] w-[150px]"
       renderExtraFooter={renderExtraHeader} // Use renderExtraFooter instead of renderExtraHeader
       picker={getPickerType()} // Set the picker type directly
       locale={locale} // Set the Vietnamese locale
       defaultValue={dayjs()} // Set the default value
+      disabled={disabled}
     />
   );
 };
