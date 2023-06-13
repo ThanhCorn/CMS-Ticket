@@ -20,6 +20,7 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "canvasjs-react-charts.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }],
+  "types": ["@canvasjs/react-charts"]
 }

@@ -10,9 +10,9 @@ function App() {
   return (
     <Router>
       <div className="w-full h-screen bg-[#E5E5E5]">
-        <div className="flex ">
+        <div className="flex h-screen ">
           <Sidebar />
-          <div className="flex w-full">
+          <div className="flex w-full justify-between flex-col">
             <Navbar />
             <Routes>
               <Route path="/" element={<Dashboard />} />

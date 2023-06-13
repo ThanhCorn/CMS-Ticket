@@ -4,6 +4,17 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+.ant-picker-header-super-prev-btn {
+  display: block;
+}
+
+.icon-navbar {
+  @apply w-[24px] mr-7 font-light text-[#1E0D03];
+}
+
+.img-navbar {
+  @apply h-[48px] w-[48px] rounded-full;
+}
 body {
   font-family: 'Montserrat', sans-serif;
 }

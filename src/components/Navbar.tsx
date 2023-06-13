@@ -6,23 +6,32 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Navbar = () => {
   return (
-    <div className="flex mx-auto w-full">
-      <div className="h-[50px] w-[100%] bg-[#EDE6E6]">
-        <form className=" relative flex space-x-0 bg-[#EDE6E6] border-r-12">
-          <input
-            type="search"
-            placeholder="search"
-            className="h-[50px] w-[500px] rounded-md pl-5 pr-10"
-          />
-          <button type="submit" className="absolute right-0 h-[48px] w-[48px]">
-            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
-          </button>
-        </form>
+    <div className="flex mx-auto w-full justify-between h-[50] mt-5 mb-5 ">
+      <div className="h-[50px] w-[50%] bg-[#EDE6E6]">
+        <div className="flex space-x-0 bg-[#EDE6E6] border-r-12 ">
+          <form className="relative">
+            <input
+              type="search"
+              placeholder="search"
+              className="h-[50px] w-[500px] rounded-md pl-5 pr-10 relative"
+            />
+            <button
+              type="submit"
+              className="absolute right-0 h-[48px] w-[48px]"
+            >
+              <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
+            </button>
+          </form>
+        </div>
       </div>
-      <div className="">
-        <FontAwesomeIcon icon={faEnvelope} size="lg" className="icon-svg" />
-        <FontAwesomeIcon icon={faEnvelope} size="lg" />
-        <FontAwesomeIcon icon={faEnvelope} size="lg" />
+      <div className=" flex items-center justify-center mr-10">
+        <FontAwesomeIcon icon={faEnvelope} size="xl" className="icon-navbar" />
+        <FontAwesomeIcon icon={faEnvelope} size="xl" className="icon-navbar" />
+        <img
+          src="https://lh3.googleusercontent.com/ogw/AOLn63HJtqLcVkGQ9ON8evBrqkP47WPeT3Nae1ohqC6w=s32-c-mo"
+          alt="avatar"
+          className="img-navbar"
+        />
       </div>
     </div>
   );
