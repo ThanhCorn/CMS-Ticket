@@ -1,7 +1,6 @@
 import Logo from './Logo';
-import { Button, Menu } from 'antd';
+import { Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import { useNavigate } from 'react-router';
 import {
   faFileInvoice,
@@ -12,6 +11,7 @@ import {
 
 const Sidebar = () => {
   const navigate = useNavigate();
+
   return (
     <div className="w-[20%] flex flex-col mx-10 mt-4">
       <Logo />

@@ -3,8 +3,40 @@ import SearchBar from '../components/SearchBar';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Table } from 'antd';
 import { styled } from 'styled-components';
+import { AppDispatch, RootState } from '../app/store';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchTickets } from '../features/ticketsSlice';
+
+type Status = {
+  Used: boolean;
+  NotUsedYet: boolean;
+  OutOfUsed: boolean;
+};
 
 const TicketManagement = () => {
+  const dispatch: AppDispatch = useDispatch();
+  const { tickets, isLoading } = useSelector(
+    (state: RootState) => state.tickets,
+  );
+
+  useEffect(() => {
+    dispatch(fetchTickets());
+  }, [dispatch]);
+  console.log(tickets, isLoading);
+
+  const renderStatus = (status: Status) => {
+    if (status.Used) {
+      return 'Đã sử dụng';
+    } else if (status.NotUsedYet) {
+      return 'Chưa sử dụng';
+    } else if (status.OutOfUsed) {
+      return 'Hết hạn';
+    }
+    return '';
+  };
+
   return (
     <div className="flex flex-1 justify-start h-screen w-full">
       <div className="bg-white h-[95%] w-[98%] ">
@@ -29,26 +61,42 @@ const TicketManagement = () => {
               columns={[
                 {
                   title: 'STT',
+                  dataIndex: 'STT',
+                  key: 'STT',
                 },
                 {
                   title: 'Booking Code',
+                  dataIndex: 'BookingCode',
+                  key: 'BookingCode',
                 },
                 {
                   title: 'Số vé',
+                  dataIndex: 'TicketNumber',
+                  key: 'TicketNumber',
                 },
                 {
                   title: 'Tình trạng sử dụng',
+                  dataIndex: 'Status',
+                  key: 'Status',
+                  render: renderStatus,
                 },
                 {
                   title: 'Ngày sử dụng',
+                  dataIndex: 'DateUsed',
+                  key: 'DateUsed',
                 },
                 {
                   title: 'Ngày xuất vé',
+                  dataIndex: 'DatePrintf',
+                  key: 'DatePrintf',
                 },
                 {
                   title: 'Cổng check-in',
+                  dataIndex: 'CheckinDoor',
+                  key: 'CheckinDoor',
                 },
               ]}
+              dataSource={tickets}
             ></CustomTable>
           </div>
         </div>
@@ -63,6 +111,9 @@ const CustomTable = styled(Table)`
   .ant-table-thead > tr > th {
     background-color: #f1f4f8;
     font-weight: 600;
+    text-align: center;
+  }
+  td {
     text-align: center;
   }
 `;

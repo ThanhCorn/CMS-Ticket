@@ -9,6 +9,7 @@ const Chart = () => {
 
   const options = {
     animationEnabled: true,
+    height: 200,
     axisX: {
       valueFormatString: '',
       lineThickness: 1,
@@ -22,6 +23,7 @@ const Chart = () => {
       },
     },
     axisY: {
+      interval: 20,
       suffix: 'tr',
     },
     data: [
@@ -35,12 +37,12 @@ const Chart = () => {
           { x: new Date(2023, 4, 5), y: 150 },
           { x: new Date(2023, 4, 12), y: 140 },
           { x: new Date(2023, 4, 19), y: 160 },
-          { x: new Date(2023, 4, 26), y: 190 },
+          { x: new Date(2023, 4, 26), y: 170 },
         ],
       },
     ],
   };
-  return <CanvasJSChart options={options} className="h-[250px]" />;
+  return <CanvasJSChart options={options} />;
 };
 
 export default Chart;
