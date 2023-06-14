@@ -47,3 +47,8 @@ body {
   font-weight: 300;
   color: aliceblue;
 }
+
+.ant-table-thead {
+  background: #f1f4f8;
+  border-radius: 8px 8px 0px 0px;
+}

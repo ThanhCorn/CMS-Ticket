@@ -1,13 +1,14 @@
 import Logo from './Logo';
 import { Button, Menu } from 'antd';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { useNavigate } from 'react-router';
 import {
   faFileInvoice,
   faGear,
   faHouse,
   faTicket,
 } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const Sidebar = () => {
             {
               label: 'Cài đặt',
               icon: <FontAwesomeIcon icon={faGear} className="icon-svg" />,
-              key: '/Setting',
+              key: '/Setting/',
               children: [
                 {
                   label: 'Gói dịch vụ',
