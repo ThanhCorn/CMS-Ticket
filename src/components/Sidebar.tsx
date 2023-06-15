@@ -13,7 +13,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-[20%] flex flex-col mx-10 mt-4">
+    <div className="w-[20%] flex flex-col mx-10 mt-4 relative">
       <Logo />
       <div className="flex flex-col">
         <Menu
@@ -54,7 +54,7 @@ const Sidebar = () => {
           ]}
         />
       </div>
-      <div className="fixed bottom-0 mb-4">
+      <div className="absolute bottom-0">
         <p>Copyright @ {new Date().getFullYear()} Alta Software</p>
       </div>
     </div>

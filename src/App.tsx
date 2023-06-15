@@ -10,7 +10,7 @@ function App() {
   return (
     <Router>
       <div className="w-full h-screen bg-[#E5E5E5]">
-        <div className="flex h-screen ">
+        <div className="flex w-full h-[98%] ">
           <Sidebar />
           <div className="flex w-full justify-between flex-col">
             <Navbar />

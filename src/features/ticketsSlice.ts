@@ -10,15 +10,15 @@ const initialState = {
 
 export const fetchTickets = createAsyncThunk(
   'tickets/fetchTickets',
-  async () => {
+  async (_, thunkAPI) => {
     try {
       const querySnapshot = await getDocs(collection(db, 'tickes'));
       const ticketsData = querySnapshot.docs.map((doc) => doc.data());
       const tickets = ticketsData.map(
         (data): TicKetType => ({
           STT: data.STT,
-          DatePrintf: data.DatePrintf.toDate().toISOString(),
-          DateUsed: data.DateUsed.toDate().toISOString(),
+          DatePrintf: data.DatePrintf.toDate().toISOString().substring(0, 10),
+          DateUsed: data.DateUsed.toDate().toISOString().substring(0, 10),
           TicketNumber: data.TicketNumber,
           BookingCode: data.BookingCode,
           CheckinDoor: data.CheckinDoor,
@@ -26,8 +26,8 @@ export const fetchTickets = createAsyncThunk(
         }),
       );
       return tickets;
-    } catch (error) {
-      throw error;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error.response.data.msg);
     }
   },
 );

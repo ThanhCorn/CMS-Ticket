@@ -4,8 +4,8 @@ import PieChart from '../components/PieChart';
 
 const Dashboard = () => {
   return (
-    <div className="flex flex-1 justify-start h-screen w-full">
-      <div className="bg-white h-[95%] w-[98%]">
+    <div className="flex flex-1 justify-start h-screen">
+      <div className="bg-white h-[98%] w-[98%]">
         <div className="mx-5 my-10">
           <h1 className="text-4xl font-black text-[#1E0D03] mb-10">Thống kê</h1>
           <div className="flex flex-col w-[95%]">
