@@ -22,10 +22,22 @@ export const fetchTickets = createAsyncThunk(
           TicketNumber: data.TicketNumber,
           BookingCode: data.BookingCode,
           CheckinDoor: data.CheckinDoor,
+          Reconciliation: data.Reconciliation,
           Status: data.Status,
+          TicketName: data.TicketName,
         }),
       );
-      return tickets;
+      const sortedSTT = tickets.sort((a, b) => {
+        if (a.STT && b.STT) {
+          if (a.STT > b.STT) return 1;
+        }
+        if (a.STT && b.STT) {
+          if (a.STT < b.STT) return -1;
+        }
+
+        return 0;
+      });
+      return sortedSTT;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error.response.data.msg);
     }

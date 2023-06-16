@@ -1,6 +1,8 @@
 import PieChart from '../components/PieChart';
 import firebase from 'firebase/compat/app';
 import { Timestamp } from 'firebase/firestore';
+import type { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import type { FilterValue, SorterResult } from 'antd/es/table/interface';
 
 export interface DataChartType {
   forDay: Array<{ day: string }>;
@@ -20,41 +22,29 @@ export interface PieChartType {
 }
 
 export interface TicKetType {
-  STT: number;
-  DatePrintf: firebase.firestore.Timestamp;
-  DateUsed: firebase.firestore.Timestamp;
-  TicketNumber: string;
-  BookingCode: string;
+  STT?: number;
+  DatePrintf?: firebase.firestore.Timestamp;
+  DateUsed?: firebase.firestore.Timestamp;
+  TicketNumber?: string;
+  BookingCode?: string;
   CheckinDoor?: string;
-  Status: {
+  Reconciliation?: boolean;
+  TicketName: string;
+  Status?: {
     Used: boolean;
     NotUsedYet: boolean;
     OutOfUsed: boolean;
   };
 }
 
-firestore
-  .collection('tickets')
-  .get()
-  .then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      const ticketData = doc.data();
-      // Access the fields of each ticket document
-      const STT = ticketData.STT;
-      const DatePrintf = ticketData.DatePrintf;
-      const DateUsed = ticketData.DateUsed;
-      const TicketNumber = ticketData.TicketNumber;
-      const BookingCode = ticketData.BookingCode;
-      const CheckinDoor = ticketData.CheckinDoor;
-      const Status = ticketData.Status;
+export interface TableParams {
+  pagination?: TablePaginationConfig;
+  sortField?: string;
+  sortOrder?: string;
+  filters?: Record<string, FilterValue>;
+}
 
-      // Process the ticket data as needed
-      console.log('Ticket Number:', TicketNumber);
-      console.log('Status:', Status);
-
-      // ... Handle other fields or perform further operations
-    });
-  })
-  .catch((error) => {
-    console.error('Error getting documents: ', error);
-  });
+export interface ModalFilterProps {
+  modalOpen: boolean;
+  setModalOpen: (value: boolean) => void;
+}

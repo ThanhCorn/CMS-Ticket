@@ -1,18 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from '../components/SearchBar';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
-import { Dropdown, Table } from 'antd';
-import { styled } from 'styled-components';
+import { useEffect, useState } from 'react';
+import ModalFilter from '../components/ModalFilter';
+import CustomTable from '../components/CustomTable';
 import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
 import { fetchTickets } from '../features/ticketsSlice';
+import { Dropdown, type MenuProps } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
-import { TableParams } from '../@types/myTypes';
-import { useState } from 'react';
-import ModalFilter from '../components/ModalFilter';
 
 const items: MenuProps['items'] = [
   {
@@ -32,17 +29,11 @@ type Status = {
 };
 
 const TicketManagement = () => {
-  const dispatch: AppDispatch = useDispatch();
   const [modalOpen, setModalOpen] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
   const { tickets, isLoading } = useSelector(
     (state: RootState) => state.tickets,
   );
-  const [tableParams, setTableParams] = useState<TableParams>({
-    pagination: {
-      current: 1,
-      pageSize: 10,
-    },
-  });
 
   useEffect(() => {
     dispatch(fetchTickets());
@@ -74,11 +65,12 @@ const TicketManagement = () => {
 
   const renderGate = (value: string) => {
     const gateStatus = tickets.some(
-      (ticket) => ticket.Status.NotUsedYet === true,
+      (ticket) => ticket?.Status?.NotUsedYet === true,
     );
+
     const gateOutOfUsed = tickets.some(
       (ticket) =>
-        ticket.CheckinDoor == 'Cổng 1' && ticket.Status.OutOfUsed === true,
+        ticket.CheckinDoor == 'Cổng 1' && ticket?.Status?.OutOfUsed === true,
     );
     if (value === '') {
       if (gateStatus) {
@@ -128,51 +120,47 @@ const TicketManagement = () => {
               </button>
             </div>
           </div>
-          <div className="w-full h-full mt-5">
-            <CustomTable
-              columns={[
-                {
-                  title: 'STT',
-                  dataIndex: 'STT',
-                  key: 'STT',
-                },
-                {
-                  title: 'Booking Code',
-                  dataIndex: 'BookingCode',
-                  key: 'BookingCode',
-                },
-                {
-                  title: 'Số vé',
-                  dataIndex: 'TicketNumber',
-                  key: 'TicketNumber',
-                },
-                {
-                  title: 'Tình trạng sử dụng',
-                  dataIndex: 'Status',
-                  key: 'Status',
-                  render: renderStatus,
-                },
-                {
-                  title: 'Ngày sử dụng',
-                  dataIndex: 'DateUsed',
-                  key: 'DateUsed',
-                },
-                {
-                  title: 'Ngày xuất vé',
-                  dataIndex: 'DatePrintf',
-                  key: 'DatePrintf',
-                },
-                {
-                  title: 'Cổng check-in',
-                  dataIndex: 'CheckinDoor',
-                  key: 'CheckinDoor',
-                  render: renderGate,
-                },
-              ]}
-              dataSource={tickets}
-              pagination={tableParams.pagination}
-            ></CustomTable>
-          </div>
+          <CustomTable
+            columns={[
+              {
+                title: 'STT',
+                dataIndex: 'STT',
+                key: 'STT',
+              },
+              {
+                title: 'Booking Code',
+                dataIndex: 'BookingCode',
+                key: 'BookingCode',
+              },
+              {
+                title: 'Số vé',
+                dataIndex: 'TicketNumber',
+                key: 'TicketNumber',
+              },
+              {
+                title: 'Tình trạng sử dụng',
+                dataIndex: 'Status',
+                key: 'Status',
+                render: renderStatus,
+              },
+              {
+                title: 'Ngày sử dụng',
+                dataIndex: 'DateUsed',
+                key: 'DateUsed',
+              },
+              {
+                title: 'Ngày xuất vé',
+                dataIndex: 'DatePrintf',
+                key: 'DatePrintf',
+              },
+              {
+                title: 'Cổng check-in',
+                dataIndex: 'CheckinDoor',
+                key: 'CheckinDoor',
+                render: renderGate,
+              },
+            ]}
+          />
         </div>
       </div>
     </div>
@@ -180,19 +168,3 @@ const TicketManagement = () => {
 };
 
 export default TicketManagement;
-
-const CustomTable = styled(Table)`
-  .ant-table-thead > tr > th {
-    background-color: #f1f4f8;
-    font-weight: 600;
-    text-align: center;
-  }
-  td {
-    text-align: center;
-  }
-  .ant-table-cell {
-    text-align: center;
-    max-width: 323px;
-    width: 323px;
-  }
-`;
