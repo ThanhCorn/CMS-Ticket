@@ -6,10 +6,23 @@ import { useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { fetchTickets } from '../features/ticketsSlice';
 
-import { CustomColumnsType, TableParams } from '../@types/myTypes';
+import {
+  CustomColumnsType,
+  TableParams,
+  TicKetType,
+  TypesOfTicket,
+} from '../@types/myTypes';
 import { useState } from 'react';
 
-const CustomTable = ({ columns }: { columns: CustomColumnsType }) => {
+type DataTicket = TicKetType[] | TypesOfTicket[];
+
+const CustomTable = ({
+  columns,
+  data,
+}: {
+  columns: CustomColumnsType;
+  data: DataTicket;
+}) => {
   const dispatch: AppDispatch = useDispatch();
   const { tickets, isLoading } = useSelector(
     (state: RootState) => state.tickets,
@@ -30,7 +43,7 @@ const CustomTable = ({ columns }: { columns: CustomColumnsType }) => {
     <div className="w-full h-full mt-5">
       <TableContent
         columns={columns}
-        dataSource={tickets}
+        dataSource={data}
         pagination={tableParams.pagination}
       ></TableContent>
     </div>

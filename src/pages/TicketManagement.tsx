@@ -121,6 +121,7 @@ const TicketManagement = () => {
             </div>
           </div>
           <CustomTable
+            data={tickets}
             columns={[
               {
                 title: 'STT',

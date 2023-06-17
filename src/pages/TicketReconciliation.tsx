@@ -1,12 +1,33 @@
 import SearchBar from '../components/SearchBar';
 import CustomTable from '../components/CustomTable';
+import { useEffect, useState } from 'react';
+import { Button, Radio, RadioChangeEvent } from 'antd';
+import DatePick from '../components/DatePick';
+import { AppDispatch, RootState } from '../app/store';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
+import { fetchTickets } from '../features/ticketsSlice';
 
 const TicketReconciliation = () => {
+  const [valueRadio, setValueRadio] = useState('all');
+  const dispatch: AppDispatch = useDispatch();
+  const { tickets, isLoading } = useSelector(
+    (state: RootState) => state.tickets,
+  );
+
+  useEffect(() => {
+    dispatch(fetchTickets());
+  }, [dispatch]);
+  console.log(tickets, isLoading);
   const rednerReconciliation = (value: boolean) => {
     if (value) {
       return <p>Đã đối soát</p>;
     }
     return <p>Chưa đối soát</p>;
+  };
+
+  const onChange = (e: RadioChangeEvent) => {
+    setValueRadio(e.target.value);
   };
 
   return (
@@ -27,6 +48,7 @@ const TicketReconciliation = () => {
               </div>
             </div>
             <CustomTable
+              data={tickets}
               columns={[
                 {
                   title: 'STT',
@@ -68,6 +90,46 @@ const TicketReconciliation = () => {
         <div className="bg-white rounded">
           <div className="mx-5 my-10">
             <h1 className="text-3xl font-black text-[#1E0D03] mb-10">Lọc vé</h1>
+            <div className="flex">
+              <p className="w-[50%] text-lg font-bold opacity-80">
+                Tình trạng đối soát
+              </p>
+              <div className="flex flex-col ">
+                <Radio.Group
+                  onChange={onChange}
+                  value={valueRadio}
+                  className="flex flex-col"
+                  buttonStyle="outline"
+                >
+                  <Radio value="all" className="text-lg mb-1">
+                    Tất cả
+                  </Radio>
+                  <Radio value="true" className="text-lg my-1">
+                    Đã đối soát
+                  </Radio>
+                  <Radio value="false" className="text-lg my-1">
+                    Chưa đối soát
+                  </Radio>
+                </Radio.Group>
+              </div>
+            </div>
+            <div className="flex my-2">
+              <p className="font-bold opacity-80 w-[50%]">Loại vé</p>
+              <span>Vé cổng</span>
+            </div>
+            <div className="flex my-3 items-center">
+              <p className="font-bold opacity-80 w-[50%]">Từ ngày</p>
+              <DatePick disabled={true} />
+            </div>
+            <div className="flex items-center">
+              <p className="font-bold opacity-80 w-[50%]">Đến ngày</p>
+              <DatePick disabled={false} />
+            </div>
+            <div className="flex justify-center items-center mt-5">
+              <Button className="w-[30%] justify-center py-5 flex items-center text-xl font-bold text-orange-400 border-orange-400">
+                Lọc
+              </Button>
+            </div>
           </div>
         </div>
       </div>
