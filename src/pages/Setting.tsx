@@ -1,17 +1,16 @@
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SearchBar from '../components/SearchBar';
-import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
-import ModalFilter from '../components/ModalFilter';
 import CustomTable from '../components/CustomTable';
 import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fetchTypesTicket } from '../features/typesTicketSlice';
 import { FormOutlined } from '@ant-design/icons';
+import ModalAddTicketPackage from '../components/ModalAddTicketPackage';
 
 const Setting = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalEditOpen, setModalEditOpen] = useState(false);
   const dispatch: AppDispatch = useDispatch();
   const { typesTicket, isLoading } = useSelector(
     (state: RootState) => state.typesTicket,
@@ -23,8 +22,17 @@ const Setting = () => {
   console.log(typesTicket, isLoading);
 
   const renderState = (state: boolean) => {
-    if (state) return <p>Đang áp dụng</p>;
-    return <p>Tắt</p>;
+    if (state)
+      return (
+        <p className="bg-[#DEF7E0] text-[#03AC00] border-green-600 border-2 rounded">
+          ⚈ Đang áp dụng
+        </p>
+      );
+    return (
+      <p className="bg-[#F8EBE8] text-[#FD5959] border-red-600 border-2 rounded w-[50%]">
+        ⚈ Tắt
+      </p>
+    );
   };
   return (
     <div className="flex flex-1 justify-start h-screen w-full">
@@ -46,9 +54,11 @@ const Setting = () => {
                 Thêm gói vé
               </button>
               {modalOpen && (
-                <ModalFilter
+                <ModalAddTicketPackage
                   modalOpen={modalOpen}
                   setModalOpen={setModalOpen}
+                  modalEditOpen={modalEditOpen}
+                  setModalEditOpen={setModalEditOpen}
                 />
               )}
             </div>
@@ -103,15 +113,26 @@ const Setting = () => {
                 key: '',
                 render: () => {
                   return (
-                    <p className="flex items-center text-lg text-orange-400 justify-center">
+                    <button
+                      className="flex items-center text-lg text-orange-400 justify-center"
+                      onClick={() => setModalEditOpen(true)}
+                    >
                       <FormOutlined className="mr-2 text-lg" />
                       Cập nhật{' '}
-                    </p>
+                    </button>
                   );
                 },
               },
             ]}
           />
+          {modalEditOpen && (
+            <ModalAddTicketPackage
+              modalOpen={modalOpen}
+              setModalOpen={setModalOpen}
+              modalEditOpen={modalEditOpen}
+              setModalEditOpen={setModalEditOpen}
+            />
+          )}
         </div>
       </div>
     </div>
