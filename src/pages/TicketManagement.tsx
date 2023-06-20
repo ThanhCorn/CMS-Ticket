@@ -8,8 +8,8 @@ import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fetchTickets } from '../features/ticketsSlice';
-import { Dropdown, type MenuProps } from 'antd';
-import { MoreOutlined } from '@ant-design/icons';
+import { Dropdown, Spin, type MenuProps } from 'antd';
+import { MoreOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const items: MenuProps['items'] = [
   {
@@ -31,14 +31,19 @@ type Status = {
 const TicketManagement = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const dispatch: AppDispatch = useDispatch();
-  const { tickets, isLoading } = useSelector(
+  const { tickets, filterTickets, isLoading } = useSelector(
     (state: RootState) => state.tickets,
   );
 
   useEffect(() => {
     dispatch(fetchTickets());
-  }, [dispatch]);
-  console.log(tickets, isLoading);
+  }, []);
+
+  const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
+
+  if (isLoading) {
+    return <Spin indicator={antIcon} />;
+  }
 
   const renderStatus = (status: Status) => {
     if (status.Used) {
@@ -113,6 +118,7 @@ const TicketManagement = () => {
                 <ModalFilter
                   modalOpen={modalOpen}
                   setModalOpen={setModalOpen}
+                  data={tickets}
                 />
               )}
               <button className="p-4 px-10 border-solid border-2 border-orange-400 rounded-xl ml-3 text-orange-400 font-bold text-xl">
@@ -121,7 +127,7 @@ const TicketManagement = () => {
             </div>
           </div>
           <CustomTable
-            data={tickets}
+            data={filterTickets.length ? filterTickets : tickets}
             columns={[
               {
                 title: 'STT',

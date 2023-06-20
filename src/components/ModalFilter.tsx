@@ -1,22 +1,30 @@
 import { Button, Modal, Radio } from 'antd';
-import { ModalFilterProps } from '../@types/myTypes';
+import { ModalFilterProps, TicKetType } from '../@types/myTypes';
 import DatePick from './DatePick';
 import { RadioChangeEvent } from 'antd/lib/radio';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Checkbox } from 'antd';
 import type { CheckboxChangeEvent } from 'antd/es/checkbox';
 import type { CheckboxValueType } from 'antd/es/checkbox/Group';
 import { styled } from 'styled-components';
+import { AppDispatch } from '../app/store';
+import { useDispatch } from 'react-redux';
+import { fetchTickets, fetchTicketsByStatus } from '../features/ticketsSlice';
 
 const plainOptions = ['Cổng 1', 'Cổng 2', 'Cổng 3', 'Cổng 4', 'Cổng 5'];
 const defaultCheckedList = ['Cổng 1'];
 
-const ModalFilter = ({ modalOpen, setModalOpen }: ModalFilterProps) => {
+const ModalFilter = ({
+  modalOpen,
+  setModalOpen,
+  data,
+}: ModalFilterProps & { data: TicKetType[] }) => {
   const [value, setValue] = useState(1);
   const [checkedList, setCheckedList] =
     useState<CheckboxValueType[]>(defaultCheckedList);
   const [indeterminate, setIndeterminate] = useState(true);
   const [checkAll, setCheckAll] = useState(false);
+  const dispatch: AppDispatch = useDispatch();
 
   const onChange = (e: RadioChangeEvent) => {
     console.log('radio checked', e.target.value);
@@ -35,12 +43,40 @@ const ModalFilter = ({ modalOpen, setModalOpen }: ModalFilterProps) => {
     setCheckAll(e.target.checked);
   };
 
+  const handleFilter = (value: number) => {
+    dispatch(fetchTicketsByStatus(value));
+
+    const filteredTickets = data.filter((ticket) => {
+      if (value === 1) {
+        return true;
+      }
+      if (value === 2) {
+        return ticket.Status?.Used === true;
+      }
+      if (value === 3) {
+        return ticket.Status?.NotUsedYet === true;
+      }
+      if (value === 4) {
+        return ticket.Status?.OutOfUsed === true;
+      }
+      return false;
+    });
+
+    setModalOpen(false);
+
+    const updatedTickets = filteredTickets.map((ticket, index) => ({
+      ...ticket,
+      STT: index + 1,
+    }));
+    return updatedTickets;
+  };
+
   return (
     <CustomModal
       title="Lọc Vé"
       centered
-      visible={modalOpen}
       okType="primary"
+      visible={modalOpen}
       onOk={() => setModalOpen(false)}
       onCancel={() => setModalOpen(false)}
       footer={null}
@@ -85,7 +121,10 @@ const ModalFilter = ({ modalOpen, setModalOpen }: ModalFilterProps) => {
         />
       </div>
       <div className="flex justify-center items-center">
-        <Button className="px-12 py-5 flex items-center font-bold text-orange-400 border-orange-400">
+        <Button
+          className="px-12 py-5 flex items-center font-bold text-orange-400 border-orange-400"
+          onClick={() => handleFilter(value)}
+        >
           Lọc
         </Button>
       </div>

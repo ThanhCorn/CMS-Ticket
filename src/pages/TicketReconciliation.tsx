@@ -6,27 +6,30 @@ import DatePick from '../components/DatePick';
 import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { fetchTickets } from '../features/ticketsSlice';
+import {
+  fetchTickets,
+  fetchTicketsByReconciliation,
+} from '../features/ticketsSlice';
 
 const TicketReconciliation = () => {
   const [valueRadio, setValueRadio] = useState('all');
   const dispatch: AppDispatch = useDispatch();
-  const { tickets, isLoading } = useSelector(
+  const { tickets, filterTickets, isLoading } = useSelector(
     (state: RootState) => state.tickets,
   );
 
   useEffect(() => {
     dispatch(fetchTickets());
-  }, [dispatch]);
-  console.log(tickets, isLoading);
+  }, []);
   const rednerReconciliation = (value: boolean) => {
     if (value) {
-      return <p>Đã đối soát</p>;
+      return <p className="text-red-400 italic font-bold">Đã đối soát</p>;
     }
-    return <p>Chưa đối soát</p>;
+    return <p className="font-bold opacity-50 italic">Chưa đối soát</p>;
   };
 
   const onChange = (e: RadioChangeEvent) => {
+    dispatch(fetchTicketsByReconciliation(e.target.value));
     setValueRadio(e.target.value);
   };
 
@@ -48,7 +51,7 @@ const TicketReconciliation = () => {
               </div>
             </div>
             <CustomTable
-              data={tickets}
+              data={filterTickets.length ? filterTickets : tickets}
               columns={[
                 {
                   title: 'STT',

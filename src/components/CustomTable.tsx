@@ -1,10 +1,5 @@
 import { Table } from 'antd';
 import { styled } from 'styled-components';
-import { AppDispatch, RootState } from '../app/store';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { fetchTickets } from '../features/ticketsSlice';
 
 import {
   CustomColumnsType,
@@ -23,10 +18,6 @@ const CustomTable = ({
   columns: CustomColumnsType;
   data: DataTicket;
 }) => {
-  const dispatch: AppDispatch = useDispatch();
-  const { tickets, isLoading } = useSelector(
-    (state: RootState) => state.tickets,
-  );
   const [tableParams, setTableParams] = useState<TableParams>({
     pagination: {
       current: 1,
@@ -34,14 +25,10 @@ const CustomTable = ({
     },
   });
 
-  useEffect(() => {
-    dispatch(fetchTickets());
-  }, [dispatch]);
-  console.log(tickets, isLoading);
-
   return (
     <div className="w-full h-full mt-5">
       <TableContent
+        key={data.length}
         columns={columns}
         dataSource={data}
         pagination={tableParams.pagination}
@@ -57,6 +44,7 @@ const TableContent = styled(Table)`
     background-color: #f1f4f8;
     font-weight: 600;
     text-align: center;
+    font-size: 14px;
   }
   td {
     text-align: center;
@@ -65,5 +53,8 @@ const TableContent = styled(Table)`
     text-align: center;
     max-width: 323px;
     width: 323px;
+  }
+  .ant-table-thead .ant-table-cell:last-child {
+    background-color: #f1f4f8;
   }
 `;
