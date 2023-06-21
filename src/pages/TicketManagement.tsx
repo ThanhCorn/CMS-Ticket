@@ -8,8 +8,11 @@ import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { fetchTickets } from '../features/ticketsSlice';
-import { Dropdown, Spin, type MenuProps } from 'antd';
+import { Dropdown, Spin, type MenuProps, Menu, Modal, Button } from 'antd';
 import { MoreOutlined, LoadingOutlined } from '@ant-design/icons';
+import { TicKetType } from '../@types/myTypes';
+import { MenuItemType } from 'antd/es/menu/hooks/useItems';
+import DatePick from '../components/DatePick';
 
 const items: MenuProps['items'] = [
   {
@@ -30,6 +33,8 @@ type Status = {
 
 const TicketManagement = () => {
   const [modalOpen, setModalOpen] = useState(false);
+  const [modal2Open, setModal2Open] = useState(false);
+  const [ticketChange, setTicketChange] = useState<TicKetType>();
   const dispatch: AppDispatch = useDispatch();
   const { tickets, filterTickets, isLoading } = useSelector(
     (state: RootState) => state.tickets,
@@ -48,55 +53,78 @@ const TicketManagement = () => {
   const renderStatus = (status: Status) => {
     if (status.Used) {
       return (
-        <p className="w-[80%]  mx-auto text-left  pl-4 py-1  border-gray-500 border-2  bg-[#EAF1F8] text-gray-500 rounded ">
+        <p className="w-[100%]  mx-auto text-left  pl-4 py-1  border-gray-500 border-2  bg-[#EAF1F8] text-gray-500 rounded ">
           ⚈ Đã sử dụng
         </p>
       );
     } else if (status.NotUsedYet) {
       return (
-        <p className="w-[80%]  mx-auto text-left  pl-4 py-1  border-green-600 border-2  bg-[#DEF7E0] text-green-600  rounded">
+        <p className="w-[100%]  mx-auto text-left  pl-4 py-1  border-green-600 border-2  bg-[#DEF7E0] text-green-600  rounded">
           ⚈ Chưa sử dụng
         </p>
       );
     } else if (status.OutOfUsed) {
       return (
-        <p className="w-[80%]  mx-auto text-left pl-4 py-1  border-red-500 border-2  bg-[#EAF1F8] text-red-500 rounded">
+        <p className="w-[100%]  mx-auto text-left pl-4 py-1  border-red-500 border-2  bg-[#EAF1F8] text-red-500 rounded">
           ⚈ Hết hạn
         </p>
       );
     }
     return '';
   };
-
-  const renderGate = (value: string) => {
-    const gateStatus = tickets.some(
-      (ticket) => ticket?.Status?.NotUsedYet === true,
-    );
-
-    const gateOutOfUsed = tickets.some(
-      (ticket) =>
-        ticket.CheckinDoor == 'Cổng 1' && ticket?.Status?.OutOfUsed === true,
-    );
-    if (value === '') {
-      if (gateStatus) {
-        return (
-          <div className="flex items-baseline w-[100%]">
-            <p className="text-xl w-[50%] text-right">-</p>
-            <Dropdown
-              menu={{ items }}
-              className="text-xl w-[50%] text-right"
-              placement="topRight"
-            >
-              <MoreOutlined />
-            </Dropdown>
-          </div>
-        );
-      } else if (gateOutOfUsed) {
-        return <p>-</p>;
+  const renderButton = (record: TicKetType) => {
+    const handleMenuClick = (items: MenuItemType) => {
+      if (items.key === '1') {
+        return '';
+      } else if (items.key === '2') {
+        setModal2Open(true);
+        setTicketChange(record);
       }
-    }
-    return value;
+    };
+    return (
+      <>
+        <Dropdown
+          overlay={<Menu items={items} onClick={handleMenuClick}></Menu>}
+          trigger={['click']}
+          placement="topRight"
+        >
+          <MoreOutlined className="text-2xl" />
+        </Dropdown>
+        {modal2Open && (
+          <Modal
+            title="Đổi ngày sử dụng vé"
+            centered
+            okType="primary"
+            open={modal2Open}
+            onOk={() => setModal2Open(false)}
+            onCancel={() => setModal2Open(false)}
+            footer={null}
+          >
+            <div className="grid grid-cols-3">
+              <div className="col-span-1">
+                <p className="mb-2">Số vé</p>
+                <p className="mb-2">Số vé</p>
+                <p className="mb-2">Tên sự kiện</p>
+                <p className="mb-2">Hạn sử dụng</p>
+              </div>
+              <div className="col-span-2">
+                <p className="mb-2">{ticketChange?.BookingCode}</p>
+                <p className="mb-2">{ticketChange?.CheckinDoor}</p>
+                <p className="mb-2">Hội trợ triển lãm hàng tiêu dùng 2021</p>
+                <DatePick disabled={true} />
+              </div>
+            </div>
+            <div className="flex justify-center items-center mt-5">
+              <Button className="px-12 py-5 flex items-center font-bold text-orange-400 border-orange-400">
+                Lọc
+              </Button>
+            </div>
+          </Modal>
+        )}
+      </>
+    );
   };
+
   return (
     <div className="flex flex-1 justify-start h-screen w-full">
       <div className="bg-white h-[98%] w-[98%] ">
@@ -164,7 +192,12 @@ const TicketManagement = () => {
                 title: 'Cổng check-in',
                 dataIndex: 'CheckinDoor',
                 key: 'CheckinDoor',
-                render: renderGate,
+              },
+              {
+                title: '',
+                dataIndex: 'tickets',
+                key: 'button',
+                render: (_, record: any) => renderButton(record as TicKetType),
               },
             ]}
           />

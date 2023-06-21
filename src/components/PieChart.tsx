@@ -24,7 +24,10 @@ const PieChart = ({ label, pointX, pointY }: PieChartType) => {
         toolTipContent: '{label}: {y} (#percent%)',
         indexLabel: '{y}',
         indexLabelPlacement: 'inside',
-        innerRadius: '50%',
+        innerRadius: '60%',
+        indexLabelBackgroundColor: 'white',
+        indexLabelMaxWidth: 70,
+        indexLabelFont: '12px Montserrat',
         dataPoints: [
           { y: pointX, color: '#FF8A48' },
           { y: pointY, color: '#4F75FF' },
@@ -35,6 +38,11 @@ const PieChart = ({ label, pointX, pointY }: PieChartType) => {
   return (
     <div className="mb-5">
       <CanvasJSChart options={options} />
+      <style>{`
+        .canvasjs-chart-container .canvasjs-index-label {
+          padding: 10px;
+        }
+      `}</style>
     </div>
   );
 };

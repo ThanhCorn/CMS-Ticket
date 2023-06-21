@@ -33,7 +33,6 @@ export const fetchTickets = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       const tickets = await fetchTicketsData();
-      console.log(tickets);
       const sortedSTT = tickets.sort((a, b) => {
         if (a.STT && b.STT) {
           if (a.STT > b.STT) return 1;
