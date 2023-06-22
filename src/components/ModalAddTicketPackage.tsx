@@ -1,6 +1,6 @@
 import { Button, Checkbox, Input, Modal, Select, TimePicker } from 'antd';
 import { styled } from 'styled-components';
-import { ModalAddProps } from '../@types/myTypes';
+import { ModalFilterProps } from '../@types/myTypes';
 import DatePick from './DatePick';
 import dayjs from 'dayjs';
 
@@ -9,7 +9,7 @@ const ModalAddTicketPackage = ({
   setModalOpen,
   modalEditOpen,
   setModalEditOpen,
-}: ModalAddProps) => {
+}: ModalFilterProps) => {
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
   };
