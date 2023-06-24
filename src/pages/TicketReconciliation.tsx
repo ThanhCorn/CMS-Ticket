@@ -1,7 +1,6 @@
-import SearchBar from '../components/SearchBar';
 import CustomTable from '../components/CustomTable';
 import { useEffect, useState } from 'react';
-import { Button, Radio, RadioChangeEvent } from 'antd';
+import { Button, Radio, RadioChangeEvent, Input } from 'antd';
 import DatePick from '../components/DatePick';
 import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
@@ -9,12 +8,14 @@ import { useSelector } from 'react-redux';
 import {
   fetchTickets,
   fetchTicketsByReconciliation,
+  filterSearchValue,
 } from '../features/ticketsSlice';
+const { Search } = Input;
 
 const TicketReconciliation = () => {
   const [valueRadio, setValueRadio] = useState('all');
   const dispatch: AppDispatch = useDispatch();
-  const { tickets, filterTickets, isLoading } = useSelector(
+  const { tickets, filterTickets, isLoading, filteredTickets } = useSelector(
     (state: RootState) => state.tickets,
   );
 
@@ -33,6 +34,10 @@ const TicketReconciliation = () => {
     setValueRadio(e.target.value);
   };
 
+  const onSearch = (value: string) => {
+    dispatch(filterSearchValue(value));
+  };
+
   return (
     <div className="flex flex-1 justify-start h-screen">
       <div className=" h-[98%] w-[98%] grid grid-cols-3">
@@ -43,7 +48,12 @@ const TicketReconciliation = () => {
             </h1>
 
             <div className="flex items-center w-full justify-between">
-              <SearchBar placeholder="Tìm bằng số vé" />
+              <Search
+                placeholder="input search text"
+                onSearch={onSearch}
+                style={{ width: 200 }}
+                allowClear
+              />
               <div className="">
                 <button className="p-4 px-10 border-solid border-2 border-orange-400 bg-orange-400 rounded-xl text-white font-bold text-xl ">
                   Chốt đối soát
@@ -51,7 +61,13 @@ const TicketReconciliation = () => {
               </div>
             </div>
             <CustomTable
-              data={filterTickets.length ? filterTickets : tickets}
+              data={
+                filterTickets.length || filteredTickets.length
+                  ? filterTickets.length
+                    ? filterTickets
+                    : filteredTickets
+                  : tickets
+              }
               columns={[
                 {
                   title: 'STT',

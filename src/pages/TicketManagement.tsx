@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import SearchBar from '../components/SearchBar';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 import ModalFilter from '../components/ModalFilter';
@@ -7,13 +6,22 @@ import CustomTable from '../components/CustomTable';
 import { AppDispatch, RootState } from '../app/store';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { fetchTickets } from '../features/ticketsSlice';
-import { Dropdown, Spin, type MenuProps, Menu, Modal, Button } from 'antd';
+import { fetchTickets, filterSearchValue } from '../features/ticketsSlice';
+import { ChangeEvent } from 'react';
+import {
+  Dropdown,
+  Spin,
+  type MenuProps,
+  Menu,
+  Modal,
+  Button,
+  Input,
+} from 'antd';
 import { MoreOutlined, LoadingOutlined } from '@ant-design/icons';
 import { TicKetType } from '../@types/myTypes';
 import { MenuItemType } from 'antd/es/menu/hooks/useItems';
 import DatePick from '../components/DatePick';
-
+const { Search } = Input;
 const items: MenuProps['items'] = [
   {
     label: <span>Sử dụng vé</span>,
@@ -35,15 +43,16 @@ const TicketManagement = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modal2Open, setModal2Open] = useState(false);
   const [ticketChange, setTicketChange] = useState<TicKetType>();
+  const [searchValue, setSearchValue] = useState('');
   const dispatch: AppDispatch = useDispatch();
-  const { tickets, filterTickets, isLoading } = useSelector(
+  const { tickets, filterTickets, isLoading, filteredTickets } = useSelector(
     (state: RootState) => state.tickets,
   );
 
   useEffect(() => {
     dispatch(fetchTickets());
   }, []);
-
+  console.log('tickets', filteredTickets);
   const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
   if (isLoading) {
@@ -125,6 +134,10 @@ const TicketManagement = () => {
     );
   };
 
+  const onSearch = (value: string) => {
+    dispatch(filterSearchValue(value));
+  };
+
   return (
     <div className="flex flex-1 justify-start h-screen w-full">
       <div className="bg-white h-[98%] w-[98%] ">
@@ -133,7 +146,12 @@ const TicketManagement = () => {
             Danh sách vé
           </h1>
           <div className="flex items-center w-full justify-between">
-            <SearchBar placeholder="Tìm bằng số vé" />
+            <Search
+              placeholder="input search text"
+              onSearch={onSearch}
+              style={{ width: 200 }}
+              allowClear
+            />
             <div className="">
               <button
                 onClick={() => setModalOpen(true)}
@@ -146,7 +164,6 @@ const TicketManagement = () => {
                 <ModalFilter
                   modalOpen={modalOpen}
                   setModalOpen={setModalOpen}
-                  data={tickets}
                 />
               )}
               <button className="p-4 px-10 border-solid border-2 border-orange-400 rounded-xl ml-3 text-orange-400 font-bold text-xl">
@@ -155,7 +172,13 @@ const TicketManagement = () => {
             </div>
           </div>
           <CustomTable
-            data={filterTickets.length ? filterTickets : tickets}
+            data={
+              filterTickets.length || filteredTickets.length
+                ? filterTickets.length
+                  ? filterTickets
+                  : filteredTickets
+                : tickets
+            }
             columns={[
               {
                 title: 'STT',

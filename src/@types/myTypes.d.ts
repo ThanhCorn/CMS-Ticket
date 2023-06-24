@@ -26,8 +26,8 @@ export interface TicKetType {
   STT?: number;
   DatePrintf?: firebase.firestore.Timestamp;
   DateUsed?: firebase.firestore.Timestamp;
-  TicketNumber?: string;
-  BookingCode?: string;
+  TicketNumber: number;
+  BookingCode: string;
   CheckinDoor?: string;
   Reconciliation?: boolean;
   TicketName: string;
@@ -59,8 +59,8 @@ export interface TableParams {
 export interface ModalFilterProps {
   modalOpen: boolean;
   setModalOpen: (value: boolean) => void;
-  modalEditOpen: boolean;
-  setModalEditOpen: (value: boolean) => void;
+  modalEditOpen?: boolean;
+  setModalEditOpen?: (value: boolean) => void;
 }
 
 type CustomColumnType = ColumnType<object>;

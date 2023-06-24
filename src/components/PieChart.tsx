@@ -1,7 +1,7 @@
 import CanvasJSReact from '@canvasjs/react-charts';
 import { PieChartType } from '../@types/myTypes';
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+const CanvasJS = CanvasJSReact.CanvasJS;
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const PieChart = ({ label, pointX, pointY }: PieChartType) => {
   const options = {

@@ -14,11 +14,7 @@ import { fetchTickets, fetchTicketsByStatus } from '../features/ticketsSlice';
 const plainOptions = ['Cổng 1', 'Cổng 2', 'Cổng 3', 'Cổng 4', 'Cổng 5'];
 const defaultCheckedList = ['Cổng 1'];
 
-const ModalFilter = ({
-  modalOpen,
-  setModalOpen,
-  data,
-}: ModalFilterProps & { data: TicKetType[] }) => {
+const ModalFilter = ({ modalOpen, setModalOpen }: ModalFilterProps) => {
   const [value, setValue] = useState(1);
   const [checkedList, setCheckedList] =
     useState<CheckboxValueType[]>(defaultCheckedList);
@@ -45,30 +41,7 @@ const ModalFilter = ({
 
   const handleFilter = (value: number) => {
     dispatch(fetchTicketsByStatus(value));
-
-    const filteredTickets = data.filter((ticket) => {
-      if (value === 1) {
-        return true;
-      }
-      if (value === 2) {
-        return ticket.Status?.Used === true;
-      }
-      if (value === 3) {
-        return ticket.Status?.NotUsedYet === true;
-      }
-      if (value === 4) {
-        return ticket.Status?.OutOfUsed === true;
-      }
-      return false;
-    });
-
     setModalOpen(false);
-
-    const updatedTickets = filteredTickets.map((ticket, index) => ({
-      ...ticket,
-      STT: index + 1,
-    }));
-    return updatedTickets;
   };
 
   return (

@@ -1,13 +1,13 @@
 import CanvasJSReact from '@canvasjs/react-charts';
 import { DateContext } from '../context/DateContext';
 import { useContext } from 'react';
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+const CanvasJS = CanvasJSReact.CanvasJS;
+const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const Chart = () => {
   const { mode } = useContext(DateContext);
 
-  var dataPoints = [
+  const dataPoints = [
     { x: new Date(2023, 3, 26), y: 120 },
     { x: new Date(2023, 4, 5), y: 180 },
     { x: new Date(2023, 4, 12), y: 170 },
@@ -16,8 +16,8 @@ const Chart = () => {
     { x: new Date(2023, 5, 3), y: 150 },
   ];
 
-  var minValue = Math.min(...dataPoints.map((point) => point.y));
-  var maxValue = Math.max(...dataPoints.map((point) => point.y));
+  const minValue = Math.min(...dataPoints.map((point) => point.y));
+  const maxValue = Math.max(...dataPoints.map((point) => point.y));
 
   const options = {
     animationEnabled: true,

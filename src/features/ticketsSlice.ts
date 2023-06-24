@@ -7,6 +7,8 @@ const initialState = {
   isLoading: false,
   tickets: [] as TicKetType[],
   filterTickets: [] as TicKetType[],
+  filteredTickets: [] as TicKetType[],
+  filterSearchValue: '',
 };
 
 const fetchTicketsData = async () => {
@@ -119,7 +121,20 @@ export const fetchTicketsByReconciliation = createAsyncThunk(
 export const ticketsSlice = createSlice({
   name: 'tickets',
   initialState,
-  reducers: {},
+  reducers: {
+    filterSearchValue: (state, action) => {
+      state.filterSearchValue = action.payload;
+      state.filteredTickets = state.tickets.filter((ticket) => {
+        const bookingCode = ticket.BookingCode.toLowerCase();
+        const ticketNumber = ticket.TicketNumber.toString();
+        const searchValue = action.payload.toLowerCase();
+        return (
+          bookingCode.includes(searchValue) ||
+          ticketNumber.includes(searchValue)
+        );
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchTickets.pending, (state) => {
@@ -155,4 +170,5 @@ export const ticketsSlice = createSlice({
   },
 });
 
+export const { filterSearchValue } = ticketsSlice.actions;
 export default ticketsSlice.reducer;

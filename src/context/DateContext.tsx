@@ -5,10 +5,12 @@ import { useState } from 'react';
 
 export const DateContext = createContext<DateContextType>({
   mode: 'day',
-  setMode: () => {},
+  setMode: () => {
+    return;
+  },
 });
 
-export const DateProvider: React.FC<React.PropsWithChildren<{}>> = ({
+export const DateProvider: React.FC<React.PropsWithChildren> = ({
   children,
 }) => {
   const [mode, setMode] = useState('day');

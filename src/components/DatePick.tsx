@@ -12,7 +12,9 @@ const DatePick = ({ disabled }: { disabled: boolean }) => {
   const handleModeChange = (e: RadioChangeEvent) => {
     setMode(e.target.value);
   };
-  useEffect(() => {}, [mode]);
+  useEffect(() => {
+    dayjs.locale('vi');
+  }, [mode]);
 
   const renderExtraHeader = () => {
     return (
